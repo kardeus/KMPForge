@@ -19,8 +19,8 @@ Kotlin Multiplatform(KMP) 프로젝트를 한 번에 초기화하는 CLI입니�
 
 ## 설치 (GitHub 원라인)
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kardeus/KMPForge/main/install.sh | \
-KMPFORGE_REPO_URL=https://github.com/kardeus/KMPForge.git bash
+git clone https://github.com/kardeus/KMPForge.git /tmp/KMPForge && \
+bash /tmp/KMPForge/install.sh
 ```
 
 ## 설치 (로컬 저장소에서)
