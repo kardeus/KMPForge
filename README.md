@@ -25,7 +25,8 @@ kmpforge doctor --target ./MyApp
 - 기본 모듈 디렉토리 생성 (`composeApp`, `shared`, `docs`, 선택적으로 `server`, `iosApp`)
 - `AGENTS.md` 템플릿 복사
 - `docs/00-policy` 기본 정책 문서 생성
-- `.github/workflows/ci.yml` 생성
+- GitHub workflow 생성 (`ci.yml`, `pr-guard.yml`, `PULL_REQUEST_TEMPLATE.md`)
+- `.githooks` 생성 및 git repo인 경우 `core.hooksPath=.githooks` 자동 설정
 - 필수 스킬 심볼릭 링크 동기화
 
 ## Skill 심볼릭 동기화

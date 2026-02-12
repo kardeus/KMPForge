@@ -31,4 +31,60 @@ jobs:
         run: ./gradlew :composeApp:assembleDebug || true
 EOT
 
-echo "[OK] ci workflow generated: $ROOT_DIR/.github/workflows/ci.yml"
+cat > "$ROOT_DIR/.github/workflows/pr-guard.yml" <<'EOT'
+name: PR Guard
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR title
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request?.title || "";
+            if (title.trim().length < 8) {
+              core.setFailed("PR title must be at least 8 characters.");
+            }
+
+      - name: Check source branch naming
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const ref = context.payload.pull_request?.head?.ref || "";
+            const ok = /^(feature|hotfix|chore|fix)\/.+$/.test(ref);
+            if (!ok) {
+              core.setFailed(`Invalid branch name: ${ref}. Use feature/*, hotfix/*, chore/*, or fix/*`);
+            }
+EOT
+
+cat > "$ROOT_DIR/.github/PULL_REQUEST_TEMPLATE.md" <<'EOT'
+## Summary
+- 
+
+## Why
+- 
+
+## Changes
+- 
+
+## Testing
+- [ ] `./gradlew test`
+- [ ] `./gradlew :composeApp:assembleDebug`
+- [ ] `./gradlew :server:test` (if server changed)
+
+## Scope
+- [ ] Mobile (`shared`, `composeApp`, `iosApp`)
+- [ ] Server (`server`)
+- [ ] Docs/Policy (`docs/00-policy`)
+EOT
+
+echo "[OK] git workflows generated:"
+echo " - $ROOT_DIR/.github/workflows/ci.yml"
+echo " - $ROOT_DIR/.github/workflows/pr-guard.yml"
+echo " - $ROOT_DIR/.github/PULL_REQUEST_TEMPLATE.md"

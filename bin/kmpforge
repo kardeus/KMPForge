@@ -67,6 +67,7 @@ EOT
   bash "$BOOTSTRAP_HOME/scripts/init/bootstrap-kmp.sh" "$temp_config"
   bash "$BOOTSTRAP_HOME/scripts/init/setup-docs-policy.sh" "$target_dir"
   bash "$BOOTSTRAP_HOME/scripts/init/setup-ci.sh" "$target_dir"
+  bash "$BOOTSTRAP_HOME/scripts/init/setup-git-hooks.sh" "$target_dir"
 
   if [[ ! -f "$target_dir/AGENTS.md" ]]; then
     cp "$BOOTSTRAP_HOME/AGENTS.md" "$target_dir/AGENTS.md"
@@ -122,8 +123,18 @@ cmd_doctor() {
     fail=1
   fi
 
+  if [[ ! -f "$target_dir/.github/workflows/pr-guard.yml" ]]; then
+    echo "[MISS] $target_dir/.github/workflows/pr-guard.yml"
+    fail=1
+  fi
+
   if [[ ! -d "$target_dir/skills" ]]; then
     echo "[MISS] $target_dir/skills"
+    fail=1
+  fi
+
+  if [[ ! -f "$target_dir/.githooks/pre-commit" ]]; then
+    echo "[MISS] $target_dir/.githooks/pre-commit"
     fail=1
   fi
 
