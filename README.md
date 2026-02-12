@@ -33,6 +33,7 @@ bash install.sh
 ```bash
 kmpforge help
 kmpforge init --name MyApp --package com.example.myapp --target ./MyApp
+kmpforge install-scripts --target ./MyApp
 kmpforge doctor --target ./MyApp
 ```
 
@@ -45,6 +46,7 @@ kmpforge init --name MyApp --package com.example.myapp --target ./MyApp --templa
 - 기본 모듈 디렉토리 생성 (`composeApp`, `shared`, `docs`, 선택적으로 `server`, `iosApp`)
 - (기본) KMPForge 내장 템플릿(`templates/kmp-base`)으로 Android/iOS/Server KMP 기본 파일 세트를 생성
 - `AGENTS.md` 템플릿 복사
+- 운영 스크립트 설치 (`scripts/apply_kotlin_signature_header.sh`, `scripts/ci/pre_pr.sh`, `scripts/ci/pr_create.sh`, `scripts/deploy-server.sh`)
 - `docs/00-policy` 기본 정책 문서 생성
 - GitHub workflow 생성 (`ci.yml`, `pr-guard.yml`, `PULL_REQUEST_TEMPLATE.md`)
 - `.githooks` 생성 및 git repo인 경우 `core.hooksPath=.githooks` 자동 설정
