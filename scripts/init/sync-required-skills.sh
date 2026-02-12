@@ -67,8 +67,9 @@ if (( ${#missing[@]} > 0 )); then
   done
   echo
   echo "AI Agent 가이드:"
-  echo "1) skill-installer 스킬로 누락 스킬 설치 요청"
-  echo "2) 또는 조직 스킬 저장소(예: /Users/jin/AgentTools/skills)에 스킬 추가"
+  echo "1) KMPForgeSkills에서 자동 설치:"
+  echo "   kmpforge install-skills --target $TARGET_DIR --repo https://github.com/kardeus/KMPForgeSkills.git"
+  echo "2) 또는 조직 스킬 저장소(예: /Users/jin/AgentTools/skills)에 수동 추가"
   echo "3) 완료 후 재실행: bash scripts/init/sync-required-skills.sh $TARGET_DIR"
   exit 2
 fi

@@ -84,6 +84,22 @@ kmpforge init --name MyApp --package com.example.myapp --target ./MyApp --templa
 kmpforge sync-skills --target ./MyApp
 ```
 
+필수 스킬을 원격 저장소에서 설치 + 심볼릭 동기화:
+```bash
+kmpforge install-skills \
+  --target ./MyApp \
+  --repo https://github.com/kardeus/KMPForgeSkills.git \
+  --branch main
+```
+
+설치 루트(`~/.codex/skills`)를 커스텀하려면:
+```bash
+kmpforge install-skills \
+  --target ./MyApp \
+  --repo https://github.com/kardeus/KMPForgeSkills.git \
+  --root /custom/skills/root
+```
+
 ## Skill 사용 시점 (TalkAbout 패턴)
 - Plan 시작: `pdca-model-router` 실행 후 `pdca-runner`
 - Do(개발): `kmp-mobile-dev`

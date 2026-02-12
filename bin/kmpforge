@@ -20,6 +20,7 @@ usage() {
 Usage:
   kmpforge init --name <app-name> --package <base-package> [--target <dir>] [--ios <true|false>] [--server <true|false>] [--template-source <dir>] [--verify]
   kmpforge install-scripts [--target <dir>]
+  kmpforge install-skills [--target <dir>] [--repo <url>] [--branch <name>] [--root <dir>]
   kmpforge sync-skills [--target <dir>]
   kmpforge doctor [--target <dir>]
   kmpforge help
@@ -111,6 +112,30 @@ cmd_install_scripts() {
   done
 
   bash "$BOOTSTRAP_HOME/scripts/init/setup-project-scripts.sh" "$target_dir"
+}
+
+cmd_install_skills() {
+  local target_dir="."
+  local repo_url="https://github.com/kardeus/KMPForgeSkills.git"
+  local branch="main"
+  local root_dir="${CODEX_HOME:-$HOME/.codex}/skills"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --target) target_dir="$2"; shift 2 ;;
+      --repo) repo_url="$2"; shift 2 ;;
+      --branch) branch="$2"; shift 2 ;;
+      --root) root_dir="$2"; shift 2 ;;
+      *) echo "[ERROR] unknown option: $1"; usage; exit 1 ;;
+    esac
+  done
+
+  bash "$BOOTSTRAP_HOME/scripts/init/install-required-skills.sh" \
+    --repo "$repo_url" \
+    --branch "$branch" \
+    --root "$root_dir"
+
+  bash "$BOOTSTRAP_HOME/scripts/init/sync-required-skills.sh" "$target_dir"
 }
 
 cmd_doctor() {
@@ -225,6 +250,7 @@ main() {
   case "$cmd" in
     init) cmd_init "$@" ;;
     install-scripts) cmd_install_scripts "$@" ;;
+    install-skills) cmd_install_skills "$@" ;;
     sync-skills) cmd_sync_skills "$@" ;;
     doctor) cmd_doctor "$@" ;;
     help|-h|--help) usage ;;
