@@ -2,6 +2,21 @@
 
 Kotlin Multiplatform(KMP) 프로젝트를 한 번에 초기화하는 CLI입니다.
 
+## 기준 버전 (Template Baseline)
+- Android Studio: `Android Studio Otter 3 Feature Drop | 2025.2.3`
+- Gradle Wrapper: `8.14.3`
+- Kotlin: `2.3.0`
+- Android Gradle Plugin (AGP): `8.11.2`
+- Compose Multiplatform: `1.10.0`
+- Ktor: `3.3.3`
+- Logback: `1.5.24`
+- Android SDK:
+  - `compileSdk = 36`
+  - `targetSdk = 36`
+  - `minSdk = 24`
+
+참고: 위 값은 KMPForge 내장 템플릿(`templates/kmp-base`) 기준이며, 템플릿이 바뀌면 함께 갱신해야 합니다.
+
 ## 설치 (GitHub 원라인)
 ```bash
 curl -fsSL https://raw.githubusercontent.com/kardeus/KMPForge/main/install.sh | \
@@ -21,14 +36,14 @@ kmpforge init --name MyApp --package com.example.myapp --target ./MyApp
 kmpforge doctor --target ./MyApp
 ```
 
-샘플 템플릿 경로를 명시하려면:
+커스텀 템플릿 경로를 명시하려면:
 ```bash
-kmpforge init --name MyApp --package com.example.myapp --target ./MyApp --template-source /Users/jin/AndroidStudioProjects/Sample
+kmpforge init --name MyApp --package com.example.myapp --target ./MyApp --template-source /path/to/template
 ```
 
 ## `init`가 자동으로 하는 작업
 - 기본 모듈 디렉토리 생성 (`composeApp`, `shared`, `docs`, 선택적으로 `server`, `iosApp`)
-- (기본) `/Users/jin/AndroidStudioProjects/Sample` 템플릿을 복사해 Android/iOS/Server KMP 기본 파일 세트를 생성
+- (기본) KMPForge 내장 템플릿(`templates/kmp-base`)으로 Android/iOS/Server KMP 기본 파일 세트를 생성
 - `AGENTS.md` 템플릿 복사
 - `docs/00-policy` 기본 정책 문서 생성
 - GitHub workflow 생성 (`ci.yml`, `pr-guard.yml`, `PULL_REQUEST_TEMPLATE.md`)

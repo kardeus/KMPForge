@@ -31,7 +31,7 @@ cmd_init() {
   local target_dir="."
   local enable_ios="true"
   local enable_server="true"
-  local template_source="${KMPFORGE_TEMPLATE_SOURCE:-/Users/jin/AndroidStudioProjects/Sample}"
+  local template_source="${KMPFORGE_TEMPLATE_SOURCE:-}"
   local verify="false"
 
   while [[ $# -gt 0 ]]; do

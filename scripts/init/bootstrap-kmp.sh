@@ -16,12 +16,19 @@ APP_NAME="${APP_NAME:-KMPApp}"
 BASE_PACKAGE="${BASE_PACKAGE:-com.example.kmpapp}"
 ENABLE_IOS="${ENABLE_IOS:-true}"
 ENABLE_SERVER="${ENABLE_SERVER:-true}"
-TEMPLATE_SOURCE="${TEMPLATE_SOURCE:-${KMPFORGE_TEMPLATE_SOURCE:-/Users/jin/AndroidStudioProjects/Sample}}"
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DEFAULT_TEMPLATE_SOURCE="$(cd "$SCRIPT_DIR/../../templates/kmp-base" && pwd -P)"
+TEMPLATE_SOURCE="${TEMPLATE_SOURCE:-${KMPFORGE_TEMPLATE_SOURCE:-$DEFAULT_TEMPLATE_SOURCE}}"
+
 if [[ "$ENABLE_IOS" == "true" && "$ENABLE_SERVER" == "true" && -d "$TEMPLATE_SOURCE" && -x "$SCRIPT_DIR/scaffold-from-template.sh" ]]; then
   "$SCRIPT_DIR/scaffold-from-template.sh" "$TEMPLATE_SOURCE" "$TARGET_DIR" "$APP_NAME" "$BASE_PACKAGE"
 else
+  if [[ "$ENABLE_IOS" == "true" && "$ENABLE_SERVER" == "true" ]]; then
+    echo "[ERROR] template source unavailable: $TEMPLATE_SOURCE"
+    echo "KMPForge 내부 템플릿이 누락되었습니다. templates/kmp-base 를 확인하세요."
+    exit 1
+  fi
+
   mkdir -p "$TARGET_DIR"/{composeApp,shared,docs/00-policy,scripts}
   [[ "$ENABLE_IOS" == "true" ]] && mkdir -p "$TARGET_DIR/iosApp"
   [[ "$ENABLE_SERVER" == "true" ]] && mkdir -p "$TARGET_DIR/server"
