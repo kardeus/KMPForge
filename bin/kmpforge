@@ -148,6 +148,26 @@ cmd_doctor() {
   if [[ ! -d "$target_dir/skills" ]]; then
     echo "[MISS] $target_dir/skills"
     fail=1
+  else
+    required_skills_file="$BOOTSTRAP_HOME/scripts/init/required-skills.txt"
+    if [[ ! -f "$required_skills_file" ]]; then
+      echo "[MISS] $required_skills_file"
+      fail=1
+    else
+      while IFS= read -r skill || [[ -n "$skill" ]]; do
+        [[ -z "$skill" ]] && continue
+        [[ "$skill" =~ ^# ]] && continue
+        skill_path="$target_dir/skills/$skill"
+        if [[ ! -L "$skill_path" ]]; then
+          if [[ -e "$skill_path" ]]; then
+            echo "[MISS] $skill_path (required symlink, but non-symlink file/dir exists)"
+          else
+            echo "[MISS] $skill_path"
+          fi
+          fail=1
+        fi
+      done < "$required_skills_file"
+    fi
   fi
 
   if [[ ! -f "$target_dir/.githooks/pre-commit" ]]; then
