@@ -76,6 +76,10 @@ run_step() {
   fi
 }
 
+if [[ -x "./scripts/ci/check_java_runtime.sh" ]]; then
+  run_step "Java runtime (11+ required, 17 recommended)" "./scripts/ci/check_java_runtime.sh 11 17"
+fi
+
 run_step "Gradle version" "./gradlew --version"
 
 if [[ "$QUICK" == "true" ]]; then

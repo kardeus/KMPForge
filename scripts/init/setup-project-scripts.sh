@@ -18,6 +18,7 @@ copy_file() {
 
 copy_file "$FORGE_ROOT/scripts/apply_kotlin_signature_header.sh" "$TARGET_DIR/scripts/apply_kotlin_signature_header.sh"
 copy_file "$FORGE_ROOT/scripts/deploy-server.sh" "$TARGET_DIR/scripts/deploy-server.sh"
+copy_file "$FORGE_ROOT/scripts/ci/check_java_runtime.sh" "$TARGET_DIR/scripts/ci/check_java_runtime.sh"
 copy_file "$FORGE_ROOT/scripts/ci/build_health_check.sh" "$TARGET_DIR/scripts/ci/build_health_check.sh"
 copy_file "$FORGE_ROOT/scripts/ci/pre_pr.sh" "$TARGET_DIR/scripts/ci/pre_pr.sh"
 copy_file "$FORGE_ROOT/scripts/ci/pr_create.sh" "$TARGET_DIR/scripts/ci/pr_create.sh"

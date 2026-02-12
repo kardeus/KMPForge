@@ -13,12 +13,15 @@
 - `scripts/` : 자동화 스크립트
 
 ## 빌드/테스트 기준 명령
+- Java 런타임은 최소 11, 권장 17 이상을 사용한다.
+- 점검 명령: `./scripts/ci/check_java_runtime.sh 11 17`
 - `./gradlew test`
 - `./gradlew :composeApp:assembleDebug`
 - `./gradlew :server:test`
 - `./gradlew :server:run`
 
 ## 빌드 헬스체크 규칙
+- `./scripts/ci/build_health_check.sh`는 내부적으로 Java 런타임 체크를 선행 수행한다.
 - PR 전 최소 1회 `./scripts/ci/build_health_check.sh --quick`를 실행한다.
 - 릴리즈/머지 직전에는 `./scripts/ci/build_health_check.sh` 전체 점검을 실행한다.
 - 결과를 파일로 남길 때는 `./scripts/ci/build_health_check.sh --report docs/04-report/build-health.md`를 사용한다.

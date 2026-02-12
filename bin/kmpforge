@@ -165,6 +165,11 @@ cmd_doctor() {
     fail=1
   fi
 
+  if [[ ! -f "$target_dir/scripts/ci/check_java_runtime.sh" ]]; then
+    echo "[MISS] $target_dir/scripts/ci/check_java_runtime.sh"
+    fail=1
+  fi
+
   if [[ ! -f "$target_dir/scripts/ci/build_health_check.sh" ]]; then
     echo "[MISS] $target_dir/scripts/ci/build_health_check.sh"
     fail=1

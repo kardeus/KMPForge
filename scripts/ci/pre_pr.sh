@@ -6,6 +6,10 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
 cd "${REPO_ROOT}"
 
+if [[ -x "./scripts/ci/check_java_runtime.sh" ]]; then
+  ./scripts/ci/check_java_runtime.sh 11 17
+fi
+
 echo "Checking required commands..."
 for cmd in git gh; do
   if ! command -v "$cmd" >/dev/null 2>&1; then

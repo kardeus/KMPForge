@@ -3,6 +3,7 @@
 Kotlin Multiplatform(KMP) 프로젝트를 한 번에 초기화하는 CLI입니다.
 
 ## 기준 버전 (Template Baseline)
+- Java Runtime: 최소 `11+`, 권장 `17+`
 - Android Studio: `Android Studio Otter 3 Feature Drop | 2025.2.3`
 - Gradle Wrapper: `8.14.3`
 - Kotlin: `2.3.0`
@@ -91,6 +92,7 @@ kmpforge sync-skills --target ./MyApp
 
 ## 보조 스크립트
 - Kotlin 헤더 일괄 적용: `scripts/apply_kotlin_signature_header.sh`
+- Java 런타임 점검: `scripts/ci/check_java_runtime.sh`
 - 빌드 헬스체크: `scripts/ci/build_health_check.sh`
 - PR 사전 점검: `scripts/ci/pre_pr.sh`
 - PR 생성 자동화: `scripts/ci/pr_create.sh`
