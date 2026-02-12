@@ -81,8 +81,6 @@ kmpforge doctor --target ./MyApp
 5. mobile-mcp-emulator-test
 6. pdca-model-router
 7. pdca-runner
-8. skill-creator
-9. skill-installer
 ```
 3. Task를 입력한다.
 ```bash
