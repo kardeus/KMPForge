@@ -15,6 +15,7 @@
 ## 빌드/테스트 기준 명령
 - Java 런타임은 최소 11, 권장 17 이상을 사용한다.
 - 점검 명령: `./scripts/ci/check_java_runtime.sh 11 17`
+- 자동 보정(로컬 shell): `./scripts/ci/check_java_runtime.sh 11 17 --auto-fix`
 - `./gradlew test`
 - `./gradlew :composeApp:assembleDebug`
 - `./gradlew :server:test`
