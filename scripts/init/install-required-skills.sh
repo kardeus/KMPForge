@@ -70,6 +70,7 @@ installed=0
 missing=0
 
 while IFS= read -r skill || [[ -n "$skill" ]]; do
+  skill="${skill%$'\r'}"
   [[ -z "$skill" ]] && continue
   [[ "$skill" =~ ^# ]] && continue
 
@@ -82,6 +83,10 @@ while IFS= read -r skill || [[ -n "$skill" ]]; do
     continue
   fi
 
+  # 기존 broken symlink / 일반 파일이 있으면 디렉토리로 재생성한다.
+  if [[ -L "$dst" || -f "$dst" ]]; then
+    rm -f "$dst"
+  fi
   mkdir -p "$dst"
   if command -v rsync >/dev/null 2>&1; then
     rsync -a --delete "$src/" "$dst/"

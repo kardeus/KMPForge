@@ -39,6 +39,11 @@ bash install.sh
 KMPFORGE_INSTALL_SKILLS=false bash install.sh
 ```
 
+스킬 설치 실패를 무시하고 CLI 설치만 진행하려면:
+```bash
+KMPFORGE_ALLOW_SKILL_INSTALL_FAILURE=true bash install.sh
+```
+
 ## 업데이트 (이미 설치한 사용자)
 ```bash
 # 기본 설치 경로(~/.kmpforge)를 사용하는 경우

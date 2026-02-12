@@ -5,6 +5,7 @@ INSTALL_DIR="${KMPFORGE_HOME:-$HOME/.kmpforge}"
 BIN_DIR="${KMPFORGE_BIN_DIR:-$HOME/.local/bin}"
 REPO_URL="${KMPFORGE_REPO_URL:-https://github.com/kardeus/KMPForge.git}"
 INSTALL_SKILLS="${KMPFORGE_INSTALL_SKILLS:-true}"
+ALLOW_SKILL_INSTALL_FAILURE="${KMPFORGE_ALLOW_SKILL_INSTALL_FAILURE:-false}"
 SKILLS_REPO_URL="${KMPFORGE_SKILLS_REPO_URL:-https://github.com/kardeus/KMPForgeSkills.git}"
 SKILLS_BRANCH="${KMPFORGE_SKILLS_BRANCH:-main}"
 SKILLS_ROOT="${KMPFORGE_SKILLS_ROOT:-${CODEX_HOME:-$HOME/.codex}/skills}"
@@ -72,8 +73,16 @@ if [[ "$INSTALL_SKILLS" == "true" ]]; then
     --root "$SKILLS_ROOT"; then
     echo "[OK] required skills installed: $SKILLS_ROOT"
   else
-    echo "[WARN] skill auto-install failed. 수동 실행:"
-    echo "  kmpforge install-skills --target <project_dir> --repo $SKILLS_REPO_URL --branch $SKILLS_BRANCH --root $SKILLS_ROOT"
+    if [[ "$ALLOW_SKILL_INSTALL_FAILURE" == "true" ]]; then
+      echo "[WARN] skill auto-install failed. 수동 실행:"
+      echo "  kmpforge install-skills --target <project_dir> --repo $SKILLS_REPO_URL --branch $SKILLS_BRANCH --root $SKILLS_ROOT"
+    else
+      echo "[ERROR] skill auto-install failed."
+      echo "수동 설치:"
+      echo "  kmpforge install-skills --target <project_dir> --repo $SKILLS_REPO_URL --branch $SKILLS_BRANCH --root $SKILLS_ROOT"
+      echo "강제로 설치를 계속하려면 KMPFORGE_ALLOW_SKILL_INSTALL_FAILURE=true 를 사용하세요."
+      exit 2
+    fi
   fi
 fi
 
