@@ -31,6 +31,14 @@
 - 프로젝트 시작 직후 `bash scripts/init/sync-required-skills.sh .`를 실행해 필요한 스킬을 `skills/`에 심볼릭 링크한다.
 - 스킬 누락 시 스크립트가 누락 목록과 AI Agent 액션 가이드를 출력하며, 누락 스킬 설치 후 재실행한다.
 
+## Skill 사용 패턴 (TalkAbout 기준 이식)
+- **PDCA 태스크 시작**: `pdca-model-router`를 먼저 실행하고, 이어서 `pdca-runner`를 실행한다.
+- **소규모/국소 수정 발견 시**: `pdca-model-router`를 재실행해 fast-path(REMOTE 우선) 적용 여부를 재판단한다.
+- **개발(Do 단계)**: 모바일/KMP 구현은 `kmp-mobile-dev` 스킬을 기준으로 수행한다.
+- **테스트(Check 단계)**: 모바일 회귀 검증은 `mobile-mcp-emulator-test` 스킬을 우선 사용한다.
+- **정책 문서 정리(Act 단계)**: `docs-policy-organizer`를 실행해 `docs/00-policy`를 최신화한다.
+- **정책 업데이트 요청**: 사용자가 `정책 업데이트해줘`를 요청하면 `docs-policy-organizer`를 반드시 사용한다.
+
 ## 브랜치/커밋 규칙
 - 기능 작업 시작 시 `feature/*` 브랜치를 생성한다.
 - 기능 코드 + 정책 문서 업데이트를 원칙적으로 1회 커밋으로 반영한다.
@@ -46,6 +54,13 @@
 - 모바일 변경(`shared`, `composeApp`, `iosApp`) 포함: `kmp-mobile-reviewer`
 - 서버 변경(`server`) 포함: `kotlin-server-reviewer`
 - 혼합 변경: 두 스킬 모두 적용해 영역 분리 리뷰
+
+## 단계별 Skill 트리거 매트릭스
+- Plan: `pdca-model-router` → `pdca-runner`
+- Do (모바일 구현): `kmp-mobile-dev`
+- Check (모바일 회귀): `mobile-mcp-emulator-test`
+- Check (리뷰): 변경 범위에 따라 `kmp-mobile-reviewer`/`kotlin-server-reviewer`
+- Act (정책 반영): `docs-policy-organizer`
 
 ## 문서 정책 업데이트 규칙
 - 사용자가 `정책 업데이트해줘`를 요청하면 `docs-policy-organizer`를 사용한다.

@@ -84,6 +84,14 @@ kmpforge init --name MyApp --package com.example.myapp --target ./MyApp --templa
 kmpforge sync-skills --target ./MyApp
 ```
 
+## Skill 사용 시점 (TalkAbout 패턴)
+- Plan 시작: `pdca-model-router` 실행 후 `pdca-runner`
+- Do(개발): `kmp-mobile-dev`
+- Check(모바일 회귀): `mobile-mcp-emulator-test`
+- Check(리뷰): 변경 범위에 따라 `kmp-mobile-reviewer` / `kotlin-server-reviewer`
+- Act(문서 정책): `docs-policy-organizer`
+- 정책 업데이트 요청(`정책 업데이트해줘`): `docs-policy-organizer` 필수
+
 ## 권장 운영 루프
 1. `pdca-model-router`
 2. `pdca-runner`
