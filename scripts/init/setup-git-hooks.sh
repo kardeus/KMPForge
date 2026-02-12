@@ -25,6 +25,12 @@ if git diff --cached --name-only | grep -E "$blocked_patterns" >/dev/null 2>&1; 
   exit 1
 fi
 
+# Auto-apply Kotlin file signature headers and include updated files in commit.
+if [[ -x "./scripts/apply_kotlin_signature_header.sh" ]]; then
+  ./scripts/apply_kotlin_signature_header.sh >/dev/null
+  git add -A '*.kt'
+fi
+
 exit 0
 EOT
 

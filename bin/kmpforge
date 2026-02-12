@@ -75,6 +75,13 @@ EOT
   bash "$BOOTSTRAP_HOME/scripts/init/setup-ci.sh" "$target_dir"
   bash "$BOOTSTRAP_HOME/scripts/init/setup-git-hooks.sh" "$target_dir"
 
+  if [[ -x "$target_dir/scripts/apply_kotlin_signature_header.sh" ]]; then
+    (
+      cd "$target_dir"
+      ./scripts/apply_kotlin_signature_header.sh
+    )
+  fi
+
   if [[ ! -f "$target_dir/AGENTS.md" ]]; then
     cp "$BOOTSTRAP_HOME/AGENTS.md" "$target_dir/AGENTS.md"
     echo "[OK] AGENTS.md copied -> $target_dir/AGENTS.md"
