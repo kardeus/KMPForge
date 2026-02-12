@@ -70,3 +70,9 @@ kmpforge sync-skills --target ./MyApp
 2. `pdca-runner`
 3. 구현/테스트
 4. `docs-policy-organizer`
+
+## 보조 스크립트
+- Kotlin 헤더 일괄 적용: `scripts/apply_kotlin_signature_header.sh`
+- PR 사전 점검: `scripts/ci/pre_pr.sh`
+- PR 생성 자동화: `scripts/ci/pr_create.sh`
+- 서버 배포(docker compose 기반): `scripts/deploy-server.sh`
