@@ -69,6 +69,28 @@ kmpforge install-scripts --target ./MyApp
 kmpforge doctor --target ./MyApp
 ```
 
+## 설치 후 Task 실행 방법
+1. Codex/Claude 같은 AI CLI를 프로젝트 루트에서 실행한다.
+2. 현재 프로젝트에서 사용 가능한 스킬 목록을 확인한다.
+```bash
+# 현재 이 프로젝트에서 사용 가능한 스킬 목록입니다.
+1. docs-policy-organizer
+2. kmp-mobile-dev
+3. kmp-mobile-reviewer
+4. kotlin-server-reviewer
+5. mobile-mcp-emulator-test
+6. pdca-model-router
+7. pdca-runner
+8. skill-creator
+9. skill-installer
+```
+3. Task를 입력한다.
+```bash
+pdca-runner 간단한 계산기를 만들어줘
+```
+4. AI Agent가 Plan/Do/Check/Act 순서로 수행하도록 진행한다.
+5. Android Studio에서 생성/수정 결과를 열어 확인한다.
+
 커스텀 템플릿 경로를 명시하려면:
 ```bash
 kmpforge init --name MyApp --package com.example.myapp --target ./MyApp --template-source /path/to/template
