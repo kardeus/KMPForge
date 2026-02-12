@@ -136,7 +136,7 @@ kmpforge install-skills \
   --root /custom/skills/root
 ```
 
-## Skill 사용 시점 (TalkAbout 패턴)
+## Skill 사용 시점
 - Plan 시작: `pdca-model-router` 실행 후 `pdca-runner`
 - Do(개발): `kmp-mobile-dev`
 - Check(모바일 회귀): `mobile-mcp-emulator-test`
