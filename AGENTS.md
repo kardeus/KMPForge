@@ -18,6 +18,11 @@
 - `./gradlew :server:test`
 - `./gradlew :server:run`
 
+## 빌드 헬스체크 규칙
+- PR 전 최소 1회 `./scripts/ci/build_health_check.sh --quick`를 실행한다.
+- 릴리즈/머지 직전에는 `./scripts/ci/build_health_check.sh` 전체 점검을 실행한다.
+- 결과를 파일로 남길 때는 `./scripts/ci/build_health_check.sh --report docs/04-report/build-health.md`를 사용한다.
+
 ## Skill 동기화 규칙
 - 프로젝트 시작 직후 `bash scripts/init/sync-required-skills.sh .`를 실행해 필요한 스킬을 `skills/`에 심볼릭 링크한다.
 - 스킬 누락 시 스크립트가 누락 목록과 AI Agent 액션 가이드를 출력하며, 누락 스킬 설치 후 재실행한다.
@@ -52,6 +57,7 @@
 - [ ] `pdca-model-router` 실행
 - [ ] `pdca-runner` 실행 및 산출물 점검
 - [ ] 구현/테스트 완료
+- [ ] `./scripts/ci/build_health_check.sh --quick` 실행
 - [ ] 필요 시 회귀 테스트 재수행
 - [ ] `feature/*` 브랜치에서 작업
 - [ ] 리뷰 스킬 적용 완료
