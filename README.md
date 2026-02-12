@@ -30,6 +30,15 @@ cd KMPForge
 bash install.sh
 ```
 
+`install.sh`는 기본적으로 아래를 자동 수행합니다.
+- `kmpforge` CLI 설치/업데이트
+- 필수 스킬 자동 설치 (`https://github.com/kardeus/KMPForgeSkills.git`, branch `main`)
+
+자동 스킬 설치를 끄려면:
+```bash
+KMPFORGE_INSTALL_SKILLS=false bash install.sh
+```
+
 ## 업데이트 (이미 설치한 사용자)
 ```bash
 # 기본 설치 경로(~/.kmpforge)를 사용하는 경우

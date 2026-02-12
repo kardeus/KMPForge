@@ -4,6 +4,10 @@ set -euo pipefail
 INSTALL_DIR="${KMPFORGE_HOME:-$HOME/.kmpforge}"
 BIN_DIR="${KMPFORGE_BIN_DIR:-$HOME/.local/bin}"
 REPO_URL="${KMPFORGE_REPO_URL:-https://github.com/kardeus/KMPForge.git}"
+INSTALL_SKILLS="${KMPFORGE_INSTALL_SKILLS:-true}"
+SKILLS_REPO_URL="${KMPFORGE_SKILLS_REPO_URL:-https://github.com/kardeus/KMPForgeSkills.git}"
+SKILLS_BRANCH="${KMPFORGE_SKILLS_BRANCH:-main}"
+SKILLS_ROOT="${KMPFORGE_SKILLS_ROOT:-${CODEX_HOME:-$HOME/.codex}/skills}"
 
 canonical_path() {
   local p="$1"
@@ -59,6 +63,19 @@ chmod +x "$INSTALL_DIR/bin/kmpforge" "$INSTALL_DIR/scripts/init/"*.sh "$INSTALL_
 ln -sfn "$INSTALL_DIR/bin/kmpforge" "$BIN_DIR/kmpforge"
 
 echo "[OK] installed: $BIN_DIR/kmpforge"
+
+if [[ "$INSTALL_SKILLS" == "true" ]]; then
+  echo "[INFO] installing required skills from: $SKILLS_REPO_URL ($SKILLS_BRANCH)"
+  if bash "$INSTALL_DIR/scripts/init/install-required-skills.sh" \
+    --repo "$SKILLS_REPO_URL" \
+    --branch "$SKILLS_BRANCH" \
+    --root "$SKILLS_ROOT"; then
+    echo "[OK] required skills installed: $SKILLS_ROOT"
+  else
+    echo "[WARN] skill auto-install failed. 수동 실행:"
+    echo "  kmpforge install-skills --target <project_dir> --repo $SKILLS_REPO_URL --branch $SKILLS_BRANCH --root $SKILLS_ROOT"
+  fi
+fi
 
 case ":$PATH:" in
   *":$BIN_DIR:"*)
