@@ -87,10 +87,11 @@ kmpforge init --name MyApp --package com.example.myapp --target ./MyApp --templa
 - 소스: `scripts/init/required-skills.txt`
 - 타깃: `<project>/skills/<skill>` 심볼릭 링크
 - 탐색 경로:
+  - `$KMPFORGE_SKILLS_ROOT` (설정된 경우)
+  - `${KMPFORGE_HOME:-$HOME/.kmpforge}/skills`
   - `$CODEX_HOME/skills`
   - `$HOME/AgentTools/skills`
   - `$HOME/.codex/skills`
-  - `/Users/jin/AgentTools/skills`
 - 누락 시 스크립트가 필요한 스킬 목록과 AI Agent 액션 가이드를 출력한다.
 
 수동 실행:
@@ -106,7 +107,7 @@ kmpforge install-skills \
   --branch main
 ```
 
-설치 루트(`~/.codex/skills`)를 커스텀하려면:
+설치 루트(기본 `~/.kmpforge/skills`)를 커스텀하려면:
 ```bash
 kmpforge install-skills \
   --target ./MyApp \

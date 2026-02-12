@@ -6,7 +6,7 @@ SKILL_LIST_FILE="$SCRIPT_DIR/required-skills.txt"
 
 REPO_URL="https://github.com/kardeus/KMPForgeSkills.git"
 BRANCH="main"
-TARGET_ROOT="${CODEX_HOME:-$HOME/.codex}/skills"
+TARGET_ROOT="${KMPFORGE_SKILLS_ROOT:-${KMPFORGE_HOME:-$HOME/.kmpforge}/skills}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -34,7 +34,7 @@ Usage:
 Defaults:
   --repo   https://github.com/kardeus/KMPForgeSkills.git
   --branch main
-  --root   ${CODEX_HOME:-$HOME/.codex}/skills
+  --root   ${KMPFORGE_SKILLS_ROOT:-${KMPFORGE_HOME:-$HOME/.kmpforge}/skills}
 EOT
       exit 0
       ;;

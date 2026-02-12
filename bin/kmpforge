@@ -118,7 +118,7 @@ cmd_install_skills() {
   local target_dir="."
   local repo_url="https://github.com/kardeus/KMPForgeSkills.git"
   local branch="main"
-  local root_dir="${CODEX_HOME:-$HOME/.codex}/skills"
+  local root_dir="${KMPFORGE_SKILLS_ROOT:-${KMPFORGE_HOME:-$HOME/.kmpforge}/skills}"
 
   while [[ $# -gt 0 ]]; do
     case "$1" in

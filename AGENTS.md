@@ -29,6 +29,7 @@
 
 ## Skill 동기화 규칙
 - 프로젝트 시작 직후 `bash scripts/init/sync-required-skills.sh .`를 실행해 필요한 스킬을 `skills/`에 심볼릭 링크한다.
+- 기본 스킬 저장 루트는 `~/.kmpforge/skills`이며, 필요 시 `KMPFORGE_SKILLS_ROOT`로 커스텀한다.
 - 스킬 누락 시 스크립트가 누락 목록과 AI Agent 액션 가이드를 출력하며, 누락 스킬 설치 후 재실행한다.
 - 필수 스킬 자동 설치가 필요하면 `kmpforge install-skills --target . --repo https://github.com/kardeus/KMPForgeSkills.git`를 실행한다.
 

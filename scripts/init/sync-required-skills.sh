@@ -14,10 +14,14 @@ fi
 mkdir -p "$TARGET_SKILLS_DIR"
 
 CANDIDATE_ROOTS=()
+if [[ -n "${KMPFORGE_SKILLS_ROOT:-}" ]]; then
+  CANDIDATE_ROOTS+=("$KMPFORGE_SKILLS_ROOT")
+fi
+CANDIDATE_ROOTS+=("${KMPFORGE_HOME:-$HOME/.kmpforge}/skills")
 if [[ -n "${CODEX_HOME:-}" ]]; then
   CANDIDATE_ROOTS+=("$CODEX_HOME/skills")
 fi
-CANDIDATE_ROOTS+=("$HOME/AgentTools/skills" "$HOME/.codex/skills" "/Users/jin/AgentTools/skills")
+CANDIDATE_ROOTS+=("$HOME/AgentTools/skills" "$HOME/.codex/skills")
 
 find_skill_source() {
   local skill_name="$1"
@@ -69,7 +73,7 @@ if (( ${#missing[@]} > 0 )); then
   echo "AI Agent 가이드:"
   echo "1) KMPForgeSkills에서 자동 설치:"
   echo "   kmpforge install-skills --target $TARGET_DIR --repo https://github.com/kardeus/KMPForgeSkills.git"
-  echo "2) 또는 조직 스킬 저장소(예: /Users/jin/AgentTools/skills)에 수동 추가"
+  echo "2) 또는 조직 스킬 저장소(예: \$HOME/AgentTools/skills)에 수동 추가"
   echo "3) 완료 후 재실행: bash scripts/init/sync-required-skills.sh $TARGET_DIR"
   exit 2
 fi
