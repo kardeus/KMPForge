@@ -18,7 +18,7 @@ BOOTSTRAP_HOME="$(cd "$SCRIPT_DIR/.." && pwd)"
 usage() {
   cat <<'EOT'
 Usage:
-  kmpforge init --name <app-name> --package <base-package> [--target <dir>] [--ios <true|false>] [--server <true|false>] [--verify]
+  kmpforge init --name <app-name> --package <base-package> [--target <dir>] [--ios <true|false>] [--server <true|false>] [--template-source <dir>] [--verify]
   kmpforge sync-skills [--target <dir>]
   kmpforge doctor [--target <dir>]
   kmpforge help
@@ -31,6 +31,7 @@ cmd_init() {
   local target_dir="."
   local enable_ios="true"
   local enable_server="true"
+  local template_source="${KMPFORGE_TEMPLATE_SOURCE:-/Users/jin/AndroidStudioProjects/Sample}"
   local verify="false"
 
   while [[ $# -gt 0 ]]; do
@@ -40,6 +41,7 @@ cmd_init() {
       --target) target_dir="$2"; shift 2 ;;
       --ios) enable_ios="$2"; shift 2 ;;
       --server) enable_server="$2"; shift 2 ;;
+      --template-source) template_source="$2"; shift 2 ;;
       --verify) verify="true"; shift ;;
       *) echo "[ERROR] unknown option: $1"; usage; exit 1 ;;
     esac
@@ -62,6 +64,7 @@ SERVER_PORT=8080
 ENABLE_IOS=$enable_ios
 ENABLE_SERVER=$enable_server
 TARGET_DIR=$target_dir
+TEMPLATE_SOURCE=$template_source
 EOT
 
   bash "$BOOTSTRAP_HOME/scripts/init/bootstrap-kmp.sh" "$temp_config"

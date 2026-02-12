@@ -3,19 +3,13 @@ set -euo pipefail
 
 INSTALL_DIR="${KMPFORGE_HOME:-$HOME/.kmpforge}"
 BIN_DIR="${KMPFORGE_BIN_DIR:-$HOME/.local/bin}"
-REPO_URL="${KMPFORGE_REPO_URL:-https://github.com/your-org/KMPForge.git}"
+REPO_URL="${KMPFORGE_REPO_URL:-https://github.com/kardeus/KMPForge.git}"
 
 canonical_path() {
   local p="$1"
   mkdir -p "$p"
   (cd "$p" && pwd -P)
 }
-
-if [[ "$REPO_URL" == "https://github.com/your-org/KMPForge.git" ]]; then
-  echo "[WARN] 기본 REPO_URL이 placeholder 입니다."
-  echo "실제 저장소로 설치하려면 아래처럼 실행하세요:"
-  echo "KMPFORGE_REPO_URL=https://github.com/<org>/KMPForge.git bash install.sh"
-fi
 
 if [[ -d "$INSTALL_DIR/.git" ]]; then
   echo "[INFO] updating existing install: $INSTALL_DIR"
