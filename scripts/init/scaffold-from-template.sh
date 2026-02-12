@@ -11,6 +11,12 @@ if [[ ! -d "$TEMPLATE_SOURCE" ]]; then
   exit 1
 fi
 
+if [[ ! "$BASE_PACKAGE" =~ ^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$ ]]; then
+  echo "[ERROR] invalid BASE_PACKAGE: $BASE_PACKAGE"
+  echo "예: com.kardeus.myapp"
+  exit 1
+fi
+
 mkdir -p "$TARGET_DIR"
 
 if command -v rsync >/dev/null 2>&1; then
@@ -38,42 +44,26 @@ fi
 old_pkg_path="com/example/sample"
 new_pkg_path="$(printf '%s' "$BASE_PACKAGE" | tr '.' '/')"
 
-roots=(
-  "composeApp/src/commonMain/kotlin"
-  "composeApp/src/commonTest/kotlin"
-  "composeApp/src/androidMain/kotlin"
-  "composeApp/src/iosMain/kotlin"
-  "shared/src/commonMain/kotlin"
-  "shared/src/commonTest/kotlin"
-  "shared/src/androidMain/kotlin"
-  "shared/src/iosMain/kotlin"
-  "shared/src/jvmMain/kotlin"
-  "server/src/main/kotlin"
-  "server/src/test/kotlin"
-)
+while IFS= read -r old_dir; do
+  base_root="${old_dir%/$old_pkg_path}"
+  new_dir="$base_root/$new_pkg_path"
 
-for root in "${roots[@]}"; do
-  old_dir="$TARGET_DIR/$root/$old_pkg_path"
-  new_dir="$TARGET_DIR/$root/$new_pkg_path"
+  mkdir -p "$(dirname "$new_dir")"
 
-  if [[ -d "$old_dir" ]]; then
-    mkdir -p "$(dirname "$new_dir")"
-
-    if [[ -d "$new_dir" ]]; then
-      if command -v rsync >/dev/null 2>&1; then
-        rsync -a "$old_dir"/ "$new_dir"/
-      else
-        cp -R "$old_dir"/. "$new_dir"/
-      fi
-      find "$old_dir" -type f -delete 2>/dev/null || true
-      find "$old_dir" -depth -type d -exec rmdir {} \; 2>/dev/null || true
+  if [[ -d "$new_dir" ]]; then
+    if command -v rsync >/dev/null 2>&1; then
+      rsync -a "$old_dir"/ "$new_dir"/
     else
-      mv "$old_dir" "$new_dir"
+      cp -R "$old_dir"/. "$new_dir"/
     fi
-
-    find "$TARGET_DIR/$root/com" -depth -type d -exec rmdir {} \; 2>/dev/null || true
+    find "$old_dir" -type f -delete 2>/dev/null || true
+    find "$old_dir" -depth -type d -exec rmdir {} \; 2>/dev/null || true
+  else
+    mv "$old_dir" "$new_dir"
   fi
-done
+
+  find "$base_root/com" -depth -type d -exec rmdir {} \; 2>/dev/null || true
+done < <(find "$TARGET_DIR" -type d -path "*/$old_pkg_path" | sort)
 
 app_id_segment="$(printf '%s' "$APP_NAME" | tr -cd '[:alnum:]')"
 if [[ -z "$app_id_segment" ]]; then
@@ -99,5 +89,17 @@ done < <(
     \( -name "*.kts" -o -name "*.kt" -o -name "*.swift" -o -name "*.plist" -o -name "*.xml" -o -name "*.toml" -o -name "*.md" -o -name "*.xcconfig" -o -name "*.pbxproj" -o -name "*.xcworkspacedata" -o -name "*.properties" -o -name "*.json" -o -name "*.yml" -o -name "*.yaml" \) \
     -print0
 )
+
+remaining_pkg_dirs="$(find "$TARGET_DIR" -type d -path "*/$old_pkg_path" | wc -l | tr -d ' ')"
+if [[ "$remaining_pkg_dirs" != "0" ]]; then
+  echo "[ERROR] package path migration incomplete: found $remaining_pkg_dirs remaining '$old_pkg_path' directories"
+  exit 1
+fi
+
+remaining_pkg_refs="$(rg -n --hidden --glob '!.git/**' --glob '!.gradle/**' --glob '!build/**' 'com\\.example\\.sample' "$TARGET_DIR" || true)"
+if [[ -n "$remaining_pkg_refs" ]]; then
+  echo "[WARN] found remaining 'com.example.sample' references:"
+  echo "$remaining_pkg_refs"
+fi
 
 echo "[OK] project scaffolded from template: $TEMPLATE_SOURCE"
