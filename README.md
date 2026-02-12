@@ -29,6 +29,22 @@ cd KMPForge
 bash install.sh
 ```
 
+## 업데이트 (이미 설치한 사용자)
+```bash
+# 기본 설치 경로(~/.kmpforge)를 사용하는 경우
+bash ~/.kmpforge/install.sh
+```
+
+```bash
+# 커스텀 설치 경로를 사용한 경우
+KMPFORGE_HOME=/custom/path/kmpforge bash /custom/path/kmpforge/install.sh
+```
+
+업데이트 후 현재 버전 확인:
+```bash
+kmpforge help
+```
+
 ## 사용법
 ```bash
 kmpforge help
