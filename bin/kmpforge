@@ -1,0 +1,155 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+resolve_script_dir() {
+  local source="${BASH_SOURCE[0]}"
+  while [[ -L "$source" ]]; do
+    local dir
+    dir="$(cd -P "$(dirname "$source")" && pwd)"
+    source="$(readlink "$source")"
+    [[ "$source" != /* ]] && source="$dir/$source"
+  done
+  cd -P "$(dirname "$source")" && pwd
+}
+
+SCRIPT_DIR="$(resolve_script_dir)"
+BOOTSTRAP_HOME="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+usage() {
+  cat <<'EOT'
+Usage:
+  kmpforge init --name <app-name> --package <base-package> [--target <dir>] [--ios <true|false>] [--server <true|false>] [--verify]
+  kmpforge sync-skills [--target <dir>]
+  kmpforge doctor [--target <dir>]
+  kmpforge help
+EOT
+}
+
+cmd_init() {
+  local app_name=""
+  local base_package=""
+  local target_dir="."
+  local enable_ios="true"
+  local enable_server="true"
+  local verify="false"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --name) app_name="$2"; shift 2 ;;
+      --package) base_package="$2"; shift 2 ;;
+      --target) target_dir="$2"; shift 2 ;;
+      --ios) enable_ios="$2"; shift 2 ;;
+      --server) enable_server="$2"; shift 2 ;;
+      --verify) verify="true"; shift ;;
+      *) echo "[ERROR] unknown option: $1"; usage; exit 1 ;;
+    esac
+  done
+
+  if [[ -z "$app_name" || -z "$base_package" ]]; then
+    echo "[ERROR] --name, --package 는 필수입니다."
+    usage
+    exit 1
+  fi
+
+  mkdir -p "$target_dir"
+
+  local temp_config
+  temp_config="$(mktemp)"
+  cat > "$temp_config" <<EOT
+APP_NAME=$app_name
+BASE_PACKAGE=$base_package
+SERVER_PORT=8080
+ENABLE_IOS=$enable_ios
+ENABLE_SERVER=$enable_server
+TARGET_DIR=$target_dir
+EOT
+
+  bash "$BOOTSTRAP_HOME/scripts/init/bootstrap-kmp.sh" "$temp_config"
+  bash "$BOOTSTRAP_HOME/scripts/init/setup-docs-policy.sh" "$target_dir"
+  bash "$BOOTSTRAP_HOME/scripts/init/setup-ci.sh" "$target_dir"
+
+  if [[ ! -f "$target_dir/AGENTS.md" ]]; then
+    cp "$BOOTSTRAP_HOME/AGENTS.md" "$target_dir/AGENTS.md"
+    echo "[OK] AGENTS.md copied -> $target_dir/AGENTS.md"
+  else
+    echo "[SKIP] AGENTS.md already exists -> $target_dir/AGENTS.md"
+  fi
+
+  if [[ "$verify" == "true" ]]; then
+    bash "$BOOTSTRAP_HOME/scripts/init/verify-init.sh" "$target_dir"
+  fi
+
+  rm -f "$temp_config"
+  echo "[DONE] init finished"
+}
+
+cmd_sync_skills() {
+  local target_dir="."
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --target) target_dir="$2"; shift 2 ;;
+      *) echo "[ERROR] unknown option: $1"; usage; exit 1 ;;
+    esac
+  done
+
+  bash "$BOOTSTRAP_HOME/scripts/init/sync-required-skills.sh" "$target_dir"
+}
+
+cmd_doctor() {
+  local target_dir="."
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --target) target_dir="$2"; shift 2 ;;
+      *) echo "[ERROR] unknown option: $1"; usage; exit 1 ;;
+    esac
+  done
+
+  local fail=0
+  for path in "$target_dir/composeApp" "$target_dir/shared" "$target_dir/docs"; do
+    if [[ ! -d "$path" ]]; then
+      echo "[MISS] $path"
+      fail=1
+    fi
+  done
+
+  if [[ ! -f "$target_dir/AGENTS.md" ]]; then
+    echo "[MISS] $target_dir/AGENTS.md"
+    fail=1
+  fi
+
+  if [[ ! -f "$target_dir/.github/workflows/ci.yml" ]]; then
+    echo "[MISS] $target_dir/.github/workflows/ci.yml"
+    fail=1
+  fi
+
+  if [[ ! -d "$target_dir/skills" ]]; then
+    echo "[MISS] $target_dir/skills"
+    fail=1
+  fi
+
+  if [[ "$fail" -eq 1 ]]; then
+    echo "[FAIL] bootstrap doctor found missing items"
+    exit 2
+  fi
+
+  echo "[OK] bootstrap doctor passed"
+}
+
+main() {
+  local cmd="${1:-help}"
+  shift || true
+
+  case "$cmd" in
+    init) cmd_init "$@" ;;
+    sync-skills) cmd_sync_skills "$@" ;;
+    doctor) cmd_doctor "$@" ;;
+    help|-h|--help) usage ;;
+    *)
+      echo "[ERROR] unknown command: $cmd"
+      usage
+      exit 1
+      ;;
+  esac
+}
+
+main "$@"
